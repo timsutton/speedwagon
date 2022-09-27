@@ -6,9 +6,9 @@ package cmd
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/spf13/cobra"
 	"howett.net/plist"
@@ -146,7 +146,8 @@ var listCmd = &cobra.Command{
 		// }
 
 		// DEBUG: reading from a local file instead
-		file, _ := ioutil.ReadFile("dvt.plist")
+		file, _ := os.ReadFile("dvt.plist")
+
 		data := DVTDownloadablePlist{}
 
 		_, err = plist.Unmarshal([]byte(file), &data)
