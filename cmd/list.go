@@ -5,64 +5,13 @@ package cmd
 
 import (
 	"fmt"
-	"io"
-	"log"
-	"net/http"
 	"os"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
+	"github.com/timsutton/learn-go/util"
 	"howett.net/plist"
 )
-
-type DVTDownloadablePlist struct {
-	SdkToSimulatorMappings []struct {
-		SdkBuildUpdate       string `plist:"sdkBuildUpdate"`
-		SimulatorBuildUpdate string `plist:"simulatorBuildUpdate"`
-		SdkIdentifier        string `plist:"sdkIdentifier"`
-	} `plist:"sdkToSimulatorMappings"`
-	SdkToSeedMappings []struct {
-		BuildUpdate string `plist:"buildUpdate"`
-		Platform    string `plist:"platform"`
-		SeedNumber  int    `plist:"seedNumber"`
-	} `plist:"sdkToSeedMappings"`
-	RefreshInterval int `plist:"refreshInterval"`
-	Downloadables   []struct {
-		Category         string `plist:"category"`
-		SimulatorVersion struct {
-			BuildUpdate string `plist:"buildUpdate"`
-			Version     string `plist:"version"`
-		} `plist:"simulatorVersion"`
-		Source            string `plist:"source"`
-		DictionaryVersion int    `plist:"dictionaryVersion"`
-		ContentType       string `plist:"contentType"`
-		Platform          string `plist:"platform"`
-		Identifier        string `plist:"identifier"`
-		Version           string `plist:"version"`
-		FileSize          int64  `plist:"fileSize"`
-		HostRequirements  struct {
-			MaxHostVersion string `plist:"maxHostVersion"`
-		} `plist:"hostRequirements,omitempty"`
-		Name              string `plist:"name"`
-		HostRequirements0 struct {
-			ExcludedHostArchitectures []string `plist:"excludedHostArchitectures"`
-			MaxHostVersion            string   `plist:"maxHostVersion"`
-		} `plist:"hostRequirements,omitempty"`
-		HostRequirements1 struct {
-			ExcludedHostArchitectures []string `plist:"excludedHostArchitectures"`
-			MaxHostVersion            string   `plist:"maxHostVersion"`
-		} `plist:"hostRequirements,omitempty"`
-		HostRequirements2 struct {
-			ExcludedHostArchitectures []string `plist:"excludedHostArchitectures"`
-		} `plist:"hostRequirements,omitempty"`
-		HostRequirements3 struct {
-			MinHostVersion  string `plist:"minHostVersion"`
-			MinXcodeVersion string `plist:"minXcodeVersion"`
-		} `plist:"hostRequirements,omitempty"`
-		Authentication string `plist:"authentication,omitempty"`
-	} `plist:"downloadables"`
-	Version string `plist:"version"`
-}
 
 // listCmd represents the list command
 var listCmd = &cobra.Command{
@@ -75,26 +24,13 @@ var listCmd = &cobra.Command{
 	// This application is a tool to generate the needed files
 	// to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// Fetching the plist from Apple
-		dvtResp, err := http.Get("https://devimages-cdn.apple.com/downloads/xcode/simulators/index2.dvtdownloadableindex")
-		if err != nil {
-			log.Fatal(err)
-		}
-		body, err := io.ReadAll(dvtResp.Body)
-		dvtResp.Body.Close()
-		if dvtResp.StatusCode > 299 {
-			log.Fatalf("Response failed with status code: %d and\nbody: %s\n", dvtResp.StatusCode, body)
-		}
-		if err != nil {
-			log.Fatal(err)
-		}
-		// fmt.Printf("%s", body)
+		util.RefreshDVTMetadata()
+		// TODO: reading the file contents and returning the struct should probably be its own set of
+		// helper functions in util package
+		body, _ := os.ReadFile(util.DVTCacheFilePath())
 
-		// DEBUG: reading from a local file instead
-		// file, _ := os.ReadFile("dvt.plist")
-		data := DVTDownloadablePlist{}
-
-		_, err = plist.Unmarshal([]byte(body), &data)
+		data := util.DVTDownloadablePlist{}
+		_, err := plist.Unmarshal([]byte(body), &data)
 		if err != nil {
 			fmt.Println(err)
 		}
