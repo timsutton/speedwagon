@@ -16,4 +16,5 @@
 
 .vscode
 
+# TODO: remove this after the utility has been named something real
 ./learn-go
