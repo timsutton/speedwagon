@@ -8,7 +8,9 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 
+	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 	"howett.net/plist"
 )
@@ -97,15 +99,18 @@ var listCmd = &cobra.Command{
 			fmt.Println(err)
 		}
 
+		t := table.NewWriter()
+		t.SetOutputMirror(os.Stdout)
+		t.AppendHeader(table.Row{"Name", "Version", "Build"})
+
 		for i := 0; i < len(data.Downloadables); i++ {
 			if data.Downloadables[i].ContentType == "diskImage" {
-				fmt.Println("----")
-				fmt.Println("Name: ", data.Downloadables[i].Name)
-				fmt.Println("Version: ", data.Downloadables[i].SimulatorVersion.Version)
-				fmt.Println("Build: ", data.Downloadables[i].SimulatorVersion.BuildUpdate)
-				fmt.Println("----")
+				t.AppendRow([]interface{}{data.Downloadables[i].Name, data.Downloadables[i].SimulatorVersion.Version, data.Downloadables[i].SimulatorVersion.BuildUpdate})
+				t.AppendSeparator()
 			}
 		}
+		t.SetStyle(table.StyleLight)
+		t.Render()
 	},
 }
 
