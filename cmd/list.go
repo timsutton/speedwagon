@@ -8,7 +8,7 @@ import (
 
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
-	"github.com/timsutton/learn-go/util"
+	"github.com/timsutton/speedwagon/util"
 )
 
 var Data util.DVTDownloadablePlist

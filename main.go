@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/timsutton/learn-go/cmd"
-	"github.com/timsutton/learn-go/util"
+	"github.com/timsutton/speedwagon/cmd"
+	"github.com/timsutton/speedwagon/util"
 )
 
 func main() {

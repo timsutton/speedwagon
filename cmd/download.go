@@ -12,7 +12,7 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/timsutton/learn-go/util"
+	"github.com/timsutton/speedwagon/util"
 )
 
 // downloadCmd represents the download command

@@ -1,4 +1,4 @@
-module github.com/timsutton/learn-go
+module github.com/timsutton/speedwagon
 
 go 1.19
 
