@@ -1,11 +1,14 @@
 package util
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
+
+	"howett.net/plist"
 )
 
 type DVTDownloadablePlist struct {
@@ -84,6 +87,21 @@ func RefreshDVTMetadata() {
 	// DEBUG: reading from a local file instead, if there's no network available or to speed things up
 	// file, _ := os.ReadFile("dvt.plist")
 	// io.Copy(file, dvtResp.Body)
+}
+
+// Returns a complete, up-to-date DVTDownloadablePlist struct
+func DVTMetadata() DVTDownloadablePlist {
+	// For now, we just always call a refresh until we have a better way to cache its response
+	RefreshDVTMetadata()
+
+	body, _ := os.ReadFile(DVTCacheFilePath())
+
+	data := DVTDownloadablePlist{}
+	_, err := plist.Unmarshal([]byte(body), &data)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return data
 }
 
 func AppSupportDir() string {

@@ -5,8 +5,14 @@ package cmd
 
 import (
 	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
+	"github.com/timsutton/learn-go/util"
 )
 
 // downloadCmd represents the download command
@@ -20,10 +26,65 @@ working directory, named '<name of runtime>.(dmg|pkg)'.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// args[0] is safe because we're requiring exactly one arg
 		desiredRuntimeName := args[0]
-		fmt.Println("here is where we would refresh")
-		// TODO: call the func in refresh.go
-		fmt.Printf("..for desired runtime %v\n", desiredRuntimeName)
+
+		Data = util.DVTMetadata()
+		filename, url, authRequired := findMatchingRuntime(desiredRuntimeName, Data)
+		if filename == "" {
+			fmt.Printf("Found no runtime matching name: '%s'. Available runtimes:\n", desiredRuntimeName)
+			TableOutput(Data)
+			// TODO: probably makes sense to exit nonzero here?
+			return
+		}
+
+		// set up the download request
+		client := &http.Client{}
+		req, _ := http.NewRequest("GET", url, nil)
+		if authRequired {
+			adcAuthCookie := util.ADCCookieHeader(url)
+			req.Header.Set("Cookie", "ADCDownloadAuth="+adcAuthCookie)
+		}
+		resp, err := client.Do(req)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		file, err := os.Create(filename)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Printf("Downloading '%v'...\n", filename)
+		// dumb copy from HTTP response to output file
+		io.Copy(file, resp.Body)
 	},
+}
+
+// return the following for the first matching runtime by the requested name:
+// 1. string: a sensible filename
+// 2. string: source URL for a matching runtime
+// 3. bool: whether auth is required
+func findMatchingRuntime(runtimeName string, data util.DVTDownloadablePlist) (string, string, bool) {
+
+	var runtimeFilename string
+	var runtimeUrl string
+	authRequired := false
+
+	foundMatchingRuntime := false
+	for _, v := range data.Downloadables {
+		if strings.HasPrefix(v.Name, runtimeName) {
+			foundMatchingRuntime = true
+			runtimeFilename = v.Name + ".dmg"
+			runtimeUrl = v.Source
+			if v.Authentication != "" {
+				authRequired = true
+			}
+		}
+		if foundMatchingRuntime {
+			break
+		}
+	}
+
+	return runtimeFilename, runtimeUrl, authRequired
 }
 
 func init() {
