@@ -106,7 +106,7 @@ func DVTMetadata() DVTDownloadablePlist {
 
 func AppSupportDir() string {
 	userConfigDir, _ := os.UserConfigDir()
-	return filepath.Join(userConfigDir, "ca.macops.RuntimeDownloader")
+	return filepath.Join(userConfigDir, "ca.macops.speedwagon")
 }
 
 func DVTCacheFilePath() string {

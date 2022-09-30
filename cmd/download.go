@@ -1,6 +1,3 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -55,6 +52,8 @@ working directory, named '<name of runtime>.(dmg|pkg)'.`,
 
 		fmt.Printf("Downloading '%v'...\n", filename)
 		// dumb copy from HTTP response to output file
+		// TODO: start these downloads in the app support dir, moving them here
+		// only when they are complete.
 		io.Copy(file, resp.Body)
 	},
 }
