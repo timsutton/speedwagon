@@ -11,6 +11,11 @@ Also, depending on the simulator runtime version there are two different mechani
 **Note:** This is a scratch-my-own-itch usecase I picked as a first project to write something in Golang. I can only assume the Go code and structure is not idiomatic, and so I don't recommend looking at any of it.
 
 
+## Installation
+
+Download the [latest pre-built release](https://github.com/timsutton/speedwagon/releases/latest), or compile it using `go build`.
+
+
 ## Usage
 
 List available runtimes:
@@ -49,7 +54,7 @@ Pre-iOS-16-era simulator runtimes are distributed using installer packages (wrap
 
 ## Scope
 
-This tool can handle downloading both of the above types of simulators, but it doesn't currently offer any support for automating their installation on a macOS system. As the newer disk-image-based type supports CLI installation via `xcrun simctl runtime` (see [Apple's docs](https://developer.apple.com/documentation/xcode/installing-additional-simulator-runtimes)), and all new simulators will use this format going forward, there's less and less need to wrap that functionality into this tool. This may be added in the future, though.
+This tool will *download* both of the above types of simulators, but it doesn't currently offer any functionality to *install* them on a macOS system. As the newer disk-image-based type supports CLI installation via `xcrun simctl runtime` (see [Apple's docs](https://developer.apple.com/documentation/xcode/installing-additional-simulator-runtimes)), and all new simulators will use this format going forward, there's less and less need to wrap that functionality into this tool. This may be added in the future, though.
 
 
 ## More
