@@ -6,9 +6,11 @@ package cmd
 import (
 	"os"
 
+	"github.com/timsutton/speedwagon/util"
+
+	"github.com/dustin/go-humanize"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
-	"github.com/timsutton/speedwagon/util"
 )
 
 var Data util.DVTDownloadablePlist
@@ -26,13 +28,15 @@ var listCmd = &cobra.Command{
 func TableOutput(data util.DVTDownloadablePlist) {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
-	t.AppendHeader(table.Row{"Name", "Version", "Build"})
+	t.AppendHeader(table.Row{"Name", "Version", "Build", "Type", "Size"})
 
 	for i := 0; i < len(Data.Downloadables); i++ {
-		if Data.Downloadables[i].ContentType == "diskImage" {
-			t.AppendRow([]interface{}{Data.Downloadables[i].Name, Data.Downloadables[i].SimulatorVersion.Version, Data.Downloadables[i].SimulatorVersion.BuildUpdate})
-			t.AppendSeparator()
-		}
+		t.AppendRow([]interface{}{Data.Downloadables[i].Name,
+			Data.Downloadables[i].SimulatorVersion.Version,
+			Data.Downloadables[i].SimulatorVersion.BuildUpdate,
+			Data.Downloadables[i].ContentType,
+			humanize.Bytes(uint64(Data.Downloadables[i].FileSize))})
+		t.AppendSeparator()
 	}
 	t.SetStyle(table.StyleLight)
 	t.Render()
