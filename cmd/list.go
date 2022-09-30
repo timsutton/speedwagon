@@ -30,17 +30,17 @@ func TableOutput(data util.DVTDownloadablePlist) {
 	t.SetOutputMirror(os.Stdout)
 	t.AppendHeader(table.Row{"Name", "Version", "Build", "Type", "Size"})
 
-	for i := 0; i < len(Data.Downloadables); i++ {
-		t.AppendRow([]interface{}{Data.Downloadables[i].Name,
-			Data.Downloadables[i].SimulatorVersion.Version,
-			Data.Downloadables[i].SimulatorVersion.BuildUpdate,
-			Data.Downloadables[i].ContentType,
-			humanize.Bytes(uint64(Data.Downloadables[i].FileSize))})
+	for _, d := range Data.Downloadables {
+		t.AppendRow([]interface{}{
+			d.Name,
+			d.SimulatorVersion.Version,
+			d.SimulatorVersion.BuildUpdate,
+			d.ContentType,
+			humanize.Bytes(uint64(d.FileSize))})
 		t.AppendSeparator()
 	}
 	t.SetStyle(table.StyleLight)
 	t.Render()
-
 }
 
 func init() {
