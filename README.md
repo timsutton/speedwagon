@@ -1,6 +1,6 @@
 # speedwagon
 
-A very simple CLI tool for downloading Apple's Xcode simulator runtimes without needing a copy of Xcode on a Mac.
+A very simple CLI tool for downloading Apple's Xcode simulator runtimes without needing a copy of Xcode, or a Mac.
 
 ## Why?
 
