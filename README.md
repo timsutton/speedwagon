@@ -4,7 +4,9 @@ A very simple CLI tool for downloading Apple's Xcode simulator runtimes without 
 
 ## Why?
 
-It is often handy to have a local copy of additional simulator runtimes, so that they can be rapidly installed onto macOS build machines used for continuous integration.
+It is often handy to have local copies of additional simulator runtimes for the purposes of setting up macOS build machines for continuous integration. For example, they can be hosted on nearby mirror servers and retrieved more quickly and reliably.
+
+Also, depending on the simulator runtime version there are two different mechanisms required to download them, and this tool handles both of these.
 
 **Note:** This is a scratch-my-own-itch usecase I picked as a first project to write something in Golang. I can only assume the Go code and structure is not idiomatic, and so I don't recommend looking at any of it.
 
@@ -58,6 +60,7 @@ There are more details about this newer simulator distribution format and how th
 ## Future feature ideas
 
 * `list` command output in machine-parseable formats (to aid with automation)
-* Nicer progress output, better implementation for downloads given large file sizes
+* Nicer progress output, better implementation for downloads given the large file sizes
+* Configurable output destinations and file naming template
 * Error handling
 * Support rewriting older packages' installation location metadata-rewrite process [as described here](https://macops.ca/xcode-deployment-the-dvtdownloadableindex-and-ios-simulators/), so that downloaded packages are immediately useful
