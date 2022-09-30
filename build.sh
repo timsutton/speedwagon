@@ -20,7 +20,7 @@ for platform in "${PLATFORMS[@]}"; do
             exe_name="${exe_name}.exe"
         fi
 
-        GOOS="${platform}" go build -o "${BUILD_DIR}/${exe_name}"
+        GOARCH="${goarch}" GOOS="${platform}" go build -o "${BUILD_DIR}/${exe_name}"
     done
 done
 
