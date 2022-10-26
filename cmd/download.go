@@ -2,12 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"io"
-	"log"
-	"net/http"
-	"os"
 	"strings"
 
+	"github.com/cavaliergopher/grab/v3"
 	"github.com/spf13/cobra"
 	"github.com/timsutton/speedwagon/util"
 )
@@ -32,29 +29,23 @@ working directory, named '<name of runtime>.(dmg|pkg)'.`,
 			// TODO: probably makes sense to exit nonzero here?
 			return
 		}
-
-		// set up the download request
-		client := &http.Client{}
-		req, _ := http.NewRequest("GET", url, nil)
+		client := grab.NewClient()
+		req, _ := grab.NewRequest(".", url)
 		if authRequired {
 			adcAuthCookie := util.ADCCookieHeader(url)
-			req.Header.Set("Cookie", "ADCDownloadAuth="+adcAuthCookie)
-		}
-		resp, err := client.Do(req)
-		if err != nil {
-			log.Fatal(err)
+			req.HTTPRequest.Header.Set("Cookie", "ADCDownloadAuth="+adcAuthCookie)
 		}
 
-		file, err := os.Create(filename)
-		if err != nil {
-			log.Fatal(err)
+		fmt.Printf("Downloading %v...\n", req.URL())
+		resp := client.Do(req)
+
+		if err := resp.Err(); err != nil {
+			panic(err)
 		}
 
 		fmt.Printf("Downloading '%v'...\n", filename)
-		// dumb copy from HTTP response to output file
-		// TODO: start these downloads in the app support dir, moving them here
-		// only when they are complete.
-		io.Copy(file, resp.Body)
+		// TODO: consider starting these downloads in the app support dir, moving them here
+		// only when they are complete? Since we can now resume, maybe not a big deal.
 	},
 }
 
