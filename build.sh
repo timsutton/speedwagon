@@ -2,33 +2,41 @@
 
 set -eux
 
-NAME=speedwagon
-PLATFORMS=( linux windows )
-ARCHS=( amd64 arm64)
-BUILD_DIR=build
+goreleaser_snapshot_build() {
+    goreleaser release --snapshot --rm-dist
+}
 
-version=$(go run main.go version)
+manual_build() {
+    NAME=speedwagon
+    PLATFORMS=( linux windows )
+    ARCHS=( amd64 arm64)
+    BUILD_DIR=build
 
-rm -rf "${BUILD_DIR}" && mkdir "${BUILD_DIR}"
+    version=$(go run main.go version)
 
-for platform in "${PLATFORMS[@]}"; do
-    for goarch in "${ARCHS[@]}"; do
-        exe_name="${NAME}-${version}-${platform}-${goarch}"
+    rm -rf "${BUILD_DIR}" && mkdir "${BUILD_DIR}"
 
-        # Windows should have an .exe at the end
-        if [[ "${platform}" = "windows" ]]; then
-            exe_name="${exe_name}.exe"
-        fi
+    for platform in "${PLATFORMS[@]}"; do
+        for goarch in "${ARCHS[@]}"; do
+            exe_name="${NAME}-${version}-${platform}-${goarch}"
 
-        GOARCH="${goarch}" GOOS="${platform}" go build -o "${BUILD_DIR}/${exe_name}"
+            # Windows should have an .exe at the end
+            if [[ "${platform}" = "windows" ]]; then
+                exe_name="${exe_name}.exe"
+            fi
+
+            GOARCH="${goarch}" GOOS="${platform}" go build -o "${BUILD_DIR}/${exe_name}"
+        done
     done
-done
 
-# macOS should be a universal binary, so we just handle it separately
-platform=darwin
-exe_name="${NAME}-${version}-${platform}-universal"
-for goarch in arm64 amd64; do
-    GOARCH="${goarch}" go build -o "${BUILD_DIR}/${NAME}_${goarch}"
-done
-lipo -create -output "${BUILD_DIR}/${exe_name}" "${BUILD_DIR}/${NAME}_arm64" "${BUILD_DIR}/${NAME}_amd64"
-rm -f "${BUILD_DIR}/${NAME}_arm64" "${BUILD_DIR}/${NAME}_amd64"
+    # macOS should be a universal binary, so we just handle it separately
+    platform=darwin
+    exe_name="${NAME}-${version}-${platform}-universal"
+    for goarch in arm64 amd64; do
+        GOARCH="${goarch}" go build -o "${BUILD_DIR}/${NAME}_${goarch}"
+    done
+    lipo -create -output "${BUILD_DIR}/${exe_name}" "${BUILD_DIR}/${NAME}_arm64" "${BUILD_DIR}/${NAME}_amd64"
+    rm -f "${BUILD_DIR}/${NAME}_arm64" "${BUILD_DIR}/${NAME}_amd64"
+}
+
+goreleaser_snapshot_build
