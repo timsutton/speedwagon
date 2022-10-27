@@ -4,7 +4,8 @@
 
 # eventually call this with goreleaser as a hook, so that this asset is uploaded?
 
-
+# TODO: this needs also options=runtime in order to be notarized,
+# and we may also want to include an entitlements file
 codesign -s 'Developer ID Application: Timothy Sutton (43Y295X5WU)' dist/speedwagon_darwin_all/speedwagon
 
 # zip it (consider if using DMG would somehow make this easier)
