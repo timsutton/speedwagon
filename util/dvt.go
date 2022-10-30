@@ -73,7 +73,10 @@ func RefreshDVTMetadata() {
 		// TODO: same as above
 		log.Fatal(err)
 	}
-	io.Copy(file, dvtResp.Body)
+	_, err = io.Copy(file, dvtResp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
 	dvtResp.Body.Close()
 	if dvtResp.StatusCode > 299 {
 		// TODO: same as above
