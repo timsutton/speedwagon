@@ -2,9 +2,12 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"strings"
+	"time"
 
 	"github.com/cavaliergopher/grab/v3"
+	"github.com/schollz/progressbar/v3"
 	"github.com/spf13/cobra"
 	"github.com/timsutton/speedwagon/util"
 )
@@ -39,13 +42,33 @@ working directory, named '<name of runtime>.(dmg|pkg)'.`,
 		fmt.Printf("Downloading %v...\n", req.URL())
 		resp := client.Do(req)
 
+		// start UI loop
+		t := time.NewTicker(500 * time.Millisecond)
+		defer t.Stop()
+
+		bar := progressbar.DefaultBytes(
+			resp.Size(),
+			"",
+		)
+
+	Loop:
+		for {
+			select {
+			case <-t.C:
+				err := bar.Set(int(resp.BytesComplete()))
+				if err != nil {
+					log.Fatal(err)
+				}
+
+			case <-resp.Done:
+				// download is complete
+				break Loop
+			}
+		}
+
 		if err := resp.Err(); err != nil {
 			panic(err)
 		}
-
-		fmt.Printf("Downloading '%v'...\n", filename)
-		// TODO: consider starting these downloads in the app support dir, moving them here
-		// only when they are complete? Since we can now resume, maybe not a big deal.
 	},
 }
 

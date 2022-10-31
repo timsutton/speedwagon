@@ -11,6 +11,8 @@ import (
 	"howett.net/plist"
 )
 
+const DVTDownloadableIndexUrl = "https://devimages-cdn.apple.com/downloads/xcode/simulators/index2.dvtdownloadableindex"
+
 type DVTDownloadablePlist struct {
 	SdkToSimulatorMappings []struct {
 		SdkBuildUpdate       string `plist:"sdkBuildUpdate"`
@@ -68,12 +70,15 @@ func RefreshDVTMetadata() {
 		log.Fatal(err)
 	}
 
-	dvtResp, err := http.Get("https://devimages-cdn.apple.com/downloads/xcode/simulators/index2.dvtdownloadableindex")
+	dvtResp, err := http.Get(DVTDownloadableIndexUrl)
 	if err != nil {
 		// TODO: same as above
 		log.Fatal(err)
 	}
-	io.Copy(file, dvtResp.Body)
+	_, err = io.Copy(file, dvtResp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
 	dvtResp.Body.Close()
 	if dvtResp.StatusCode > 299 {
 		// TODO: same as above
