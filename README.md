@@ -8,12 +8,16 @@ It is often handy to have local copies of additional simulator runtimes for the 
 
 Also, depending on the simulator runtime version there are two different mechanisms required to download them, and this tool handles both of these.
 
-**Note:** This is a scratch-my-own-itch usecase I picked as a first project to write something in Golang. I can only assume the Go code and structure is not idiomatic, and so I don't recommend looking at any of it.
+**Note:** This is a scratch-my-own-itch usecase I picked as a first project to write something in Go. I can only assume the Go code and structure is not idiomatic, and so I don't recommend looking at any of it.
 
 
 ## Installation
 
-Download the [latest pre-built release](https://github.com/timsutton/speedwagon/releases/latest), or compile it using `go build`.
+A few options:
+
+  * Download the [latest pre-built release](https://github.com/timsutton/speedwagon/releases/latest)
+  * Install it with homebrew: `brew install timsutton/formulae/speedwagon`
+  * Build it yourself using `go build`
 
 
 ## Usage
