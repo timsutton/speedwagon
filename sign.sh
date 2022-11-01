@@ -2,17 +2,29 @@
 
 # WIP standalone script to manage signing and notarization
 
+set -eux
+
+declare -r exe_path="${1}"
+
 # eventually call this with goreleaser as a hook, so that this asset is uploaded?
 
-# TODO: this needs also options=runtime in order to be notarized,
-# and we may also want to include an entitlements file
-codesign -s 'Developer ID Application: Timothy Sutton (43Y295X5WU)' dist/speedwagon_darwin_all/speedwagon
+codesign \
+    --options=runtime \
+    --deep \
+    --strict \
+    --timestamp \
+    --sign 'Developer ID Application: Timothy Sutton (43Y295X5WU)' \
+    "${exe_path}"
 
-# zip it (consider if using DMG would somehow make this easier)
+# zip it
+ditto -c -k \
+    "${exe_path}" \
+    /tmp/speedwagon.zip
+
 # notarytool upload it
-
-# staple the ticket
-xcrun stapler staple <artifact>
+xcrun notarytool submit --wait --keychain-profile 'tim@macops.ca' /tmp/speedwagon.zip
 
 # not sure if 'install' type makes sense for a zip
-spctl --assess -vv --type install <artifact>
+spctl --assess -vv --type install "${exe_path}"
+
+rm /tmp/speedwagon.zip

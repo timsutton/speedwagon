@@ -8,6 +8,7 @@ builds:
       - linux
       - windows
       - darwin
+
 archives:
   - replacements:
       darwin: Darwin
@@ -27,3 +28,7 @@ changelog:
       - '^test:'
 universal_binaries:
 - replace: true
+  hooks:
+    post:
+      - cmd: ./sign.sh {{ .Path }}
+        output: true
