@@ -1,9 +1,9 @@
 # Changelog
 
-## [Unreleased]
+## [0.2.0] - 2022-11-02
 ### Added
 - Downloads will now automatically resume if aborted.
-- Show progress bar and transfer speed, ETA during download.
+- Show a progress bar and transfer speeds, ETA during download.
 
 ## [0.1.0] - 2022-09-30
 ### Added
