@@ -4,9 +4,9 @@ go 1.19
 
 require (
 	github.com/dustin/go-humanize v1.0.0
-	github.com/jedib0t/go-pretty/v6 v6.3.9
-	github.com/schollz/progressbar/v3 v3.11.0
-	github.com/spf13/cobra v1.5.0
+	github.com/jedib0t/go-pretty/v6 v6.4.0
+	github.com/schollz/progressbar/v3 v3.12.0
+	github.com/spf13/cobra v1.6.1
 	howett.net/plist v1.0.0
 )
 
