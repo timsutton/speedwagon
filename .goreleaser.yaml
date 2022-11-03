@@ -36,3 +36,9 @@ universal_binaries:
     post:
       - cmd: ./sign.sh {{ .Path }}
         output: true
+release:
+  github:
+    owner: timsutton
+    repo: speedwagon
+  draft: true
+  replace_existing_draft: true
