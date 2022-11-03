@@ -9,27 +9,13 @@ builds:
       - amd64
       - arm64
 archives:
-  -
-    # format: binary
-    format_overrides:
+  - format_overrides:
       - goos: windows
         format: zip
-    # replacements:
-    #   darwin: Darwin
-    #   linux: Linux
-    #   windows: Windows
-    #   386: i386
-    #   amd64: x86_64
 checksum:
   name_template: 'checksums.txt'
 snapshot:
   name_template: "{{ incpatch .Version }}-next"
-changelog:
-  sort: asc
-  filters:
-    exclude:
-      - '^docs:'
-      - '^test:'
 universal_binaries:
 - replace: true
   hooks:
@@ -38,7 +24,6 @@ universal_binaries:
         output: true
 release:
   github:
-    owner: timsutton
-    name: speedwagon
   draft: true
   replace_existing_draft: true
+  mode: replace
