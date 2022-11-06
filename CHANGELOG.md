@@ -4,6 +4,7 @@
 ### Added
 - Downloads will now automatically resume if aborted.
 - Show a progress bar and transfer speeds, ETA during download.
+- Published Darwin releases are now codesigned and notarized.
 
 ## [0.1.0] - 2022-09-30
 ### Added
