@@ -67,6 +67,7 @@ working directory, named '<name of runtime>.(dmg|pkg)'.`,
 		}
 
 		if err := resp.Err(); err != nil {
+			fmt.Printf("\n\n")
 			panic(err)
 		}
 	},
