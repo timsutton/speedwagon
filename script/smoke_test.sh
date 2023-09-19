@@ -3,7 +3,7 @@
 set -eux
 
 function cleanup() {
-    rm -f tvOS*
+    rm -f tvOS* com.apple.pkg*
 }
 
 trap cleanup EXIT
@@ -22,6 +22,7 @@ function test() {
 
     # # smallest 'package' type
     ./speedwagon download 'tvOS 12.4 Simulator'
+    file com.apple.pkg* | grep -q 'zlib compressed data'
 
     # # smallest 'diskImage' type
     ./speedwagon download 'tvOS 16 Simulator Runtime'
