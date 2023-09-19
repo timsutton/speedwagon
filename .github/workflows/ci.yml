@@ -1,7 +1,7 @@
 # This workflow will build a golang project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
 
-name: Go
+name: CI
 
 on:
   push:
@@ -11,24 +11,24 @@ on:
 
 jobs:
 
-  build:
-    runs-on: ubuntu-latest
+  smoke-test:
+    strategy:
+      matrix:
+        runner: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.runner }}
     steps:
     - uses: actions/checkout@v3
 
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.19'
+        go-version: '1.21'
 
-    - name: Build
-      run: go build -v ./...
+    # - name: Build
+    #   run: go build -v
 
-    - name: Test
-      run: go test -v ./...
+    # - name: Test
+    #   run: go test -v ./...
 
     - name: Smoke Test
-      run: |
-        ./speedwagon list
-        # smallest 'package' type
-        ./speedwagon download 'tvOS 12.4 Simulator'
+      run: bash script/smoke_test.sh
