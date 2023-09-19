@@ -16,7 +16,9 @@ Also, depending on the simulator runtime version there are two different mechani
 A few options:
 
   * Download the [latest pre-built release](https://github.com/timsutton/speedwagon/releases/latest)
-  * Install it with homebrew: `brew install timsutton/formulae/speedwagon`
+  * Install it with homebrew:
+    * `brew install timsutton/formulae/speedwagon` to install from the above pre-built releases
+    * `brew install --head timsutton/formulae/speedwagon` to build from the tip of `main`
   * Build it yourself using `go build`
 
 
