@@ -9,7 +9,7 @@ function cleanup() {
 trap cleanup EXIT
 
 function build() {
-    go build
+    go build -v
 }
 
 function test() {
@@ -24,7 +24,7 @@ function test() {
     ./speedwagon download 'tvOS 12.4 Simulator'
 
     # # smallest 'diskImage' type
-    # ./speedwagon download 'tvOS 16 Simulator Runtime'
+    ./speedwagon download 'tvOS 16 Simulator Runtime'
 }
 
 build
