@@ -12,7 +12,10 @@ on:
 jobs:
 
   smoke-test:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        runner: [ubuntu-latest]
+    runs-on: ${{ matrix.version }}
     steps:
     - uses: actions/checkout@v3
 
