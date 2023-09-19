@@ -14,8 +14,8 @@ jobs:
   smoke-test:
     strategy:
       matrix:
-        runner: [ubuntu-latest]
-    runs-on: ${{ matrix.version }}
+        runner: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.runner }}
     steps:
     - uses: actions/checkout@v3
 
