@@ -22,10 +22,11 @@ function test() {
 
     # # smallest 'package' type
     ./speedwagon download 'tvOS 12.4 Simulator'
-    file com.apple.pkg* | grep -q 'zlib compressed data'
+    file com.apple.pkg.AppleTVSimulatorSDK12_4*.dmg | grep -q 'zlib compressed data'
 
     # # smallest 'diskImage' type
     ./speedwagon download 'tvOS 16 Simulator Runtime'
+    file tvOS_16_Simulator_Runtime.dmg | grep -q 'lzfse encoded, lzvn compressed'
 }
 
 build
