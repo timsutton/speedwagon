@@ -28,7 +28,4 @@ jobs:
     #   run: go test -v ./...
 
     - name: Smoke Test
-      run: |
-        ./speedwagon list
-        # smallest 'package' type
-        ./speedwagon download 'tvOS 12.4 Simulator'
+      run: script/smoke_test.sh
