@@ -5,14 +5,14 @@ go 1.19
 require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/jedib0t/go-pretty/v6 v6.4.0
-	github.com/schollz/progressbar/v3 v3.12.0
+	github.com/schollz/progressbar/v3 v3.13.1
 	github.com/spf13/cobra v1.7.0
 	howett.net/plist v1.0.0
 )
 
 require (
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
-	golang.org/x/term v0.1.0 // indirect
+	golang.org/x/term v0.6.0 // indirect
 )
 
 require (
@@ -21,5 +21,5 @@ require (
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/rivo/uniseg v0.4.2 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	golang.org/x/sys v0.1.0 // indirect
+	golang.org/x/sys v0.6.0 // indirect
 )
