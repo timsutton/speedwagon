@@ -12,12 +12,16 @@ function build() {
     go build -v
 }
 
-function test() {
+function unit_test() {
+    go test -v ./...
+}
+
+function smoke_test() {
     ./speedwagon list
 
     (
         version=$(./speedwagon version)
-        grep -q $version util/version.go
+        grep -q "${version}" util/version.go
     )
 
     # # smallest 'package' type
@@ -30,4 +34,5 @@ function test() {
 }
 
 build
-test
+unit_test
+smoke_test
