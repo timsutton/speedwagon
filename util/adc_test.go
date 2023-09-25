@@ -1,10 +1,18 @@
 package util
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
 
 func TestAppleDownloadServicesURL(t *testing.T) {
-	got := appleDownloadServicesURL("https://fake.apple.com/more/paths/sim.dmg")
-	if got != "https://developerservices2.apple.com/services/download?path=/more/paths/sim.dmg" {
-		t.Errorf("appleDownloadServicesURL(\"https://fake.apple.com/more/paths/sim.dmg\") = %v; want 1", got)
-	}
+	assert.Equal(t,
+		appleDownloadServicesURL("https://fake.apple.com/more/paths/sim.dmg"),
+		"https://developerservices2.apple.com/services/download?path=/more/paths/sim.dmg")
 }
+
+// func TestADCCookieHeader(t *testing.T) {
+// 	fmt.Println("TODO")
+// 	ADCCookieHeader("https://foo.com/")
+// }
