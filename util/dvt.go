@@ -109,11 +109,11 @@ func DVTMetadata() DVTDownloadablePlist {
 	return data
 }
 
-func AppSupportDir() string {
-	userConfigDir, _ := os.UserConfigDir()
-	return filepath.Join(userConfigDir, "ca.macops.speedwagon")
+func AppCacheDir() string {
+	userCacheDir, _ := os.UserCacheDir()
+	return filepath.Join(userCacheDir, "ca.macops.speedwagon")
 }
 
 func DVTCacheFilePath() string {
-	return filepath.Join(AppSupportDir(), "dvt_index.plist")
+	return filepath.Join(AppCacheDir(), "dvt_index.plist")
 }
