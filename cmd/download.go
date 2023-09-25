@@ -35,7 +35,8 @@ working directory, named '<name of runtime>.(dmg|pkg)'.`,
 		client := grab.NewClient()
 		req, _ := grab.NewRequest(".", url)
 		if authRequired {
-			adcAuthCookie := util.ADCCookieHeader(url)
+			cookieRequestUrl := util.AppleDownloadServicesURL(url)
+			adcAuthCookie := util.ADCCookieHeader(cookieRequestUrl)
 			req.HTTPRequest.Header.Set("Cookie", "ADCDownloadAuth="+adcAuthCookie)
 		}
 
@@ -103,14 +104,4 @@ func findMatchingRuntime(runtimeName string, data util.DVTDownloadablePlist) (st
 
 func init() {
 	rootCmd.AddCommand(downloadCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// downloadCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// downloadCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
