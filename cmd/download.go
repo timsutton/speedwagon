@@ -35,7 +35,8 @@ working directory, named '<name of runtime>.(dmg|pkg)'.`,
 		client := grab.NewClient()
 		req, _ := grab.NewRequest(".", url)
 		if authRequired {
-			adcAuthCookie := util.ADCCookieHeader(url)
+			cookieRequestUrl := util.AppleDownloadServicesURL(url)
+			adcAuthCookie := util.ADCCookieHeader(cookieRequestUrl)
 			req.HTTPRequest.Header.Set("Cookie", "ADCDownloadAuth="+adcAuthCookie)
 		}
 
