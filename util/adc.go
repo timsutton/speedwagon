@@ -28,7 +28,7 @@ func ADCCookieHeader(downloadUrl string) string {
 // service URL we can use to retrieve the needed auth header for that ADC download URL
 // i.e. https://developerservices2.apple.com/services/download?path=/path/to/the.dmg
 func appleDownloadServicesURL(adcUrl string) string {
-	newUrl := "https://developerservices2.apple.com/services/downloadA?path="
+	newUrl := "https://developerservices2.apple.com/services/download?path="
 	// blindly assuming Apple's URLs are well-formed
 	adcUrlPath, _ := url.Parse(adcUrl)
 	newUrl += adcUrlPath.Path
