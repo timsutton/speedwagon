@@ -2,6 +2,8 @@
 
 A very simple CLI tool for downloading Apple's Xcode simulator runtimes without needing a copy of Xcode, or a Mac.
 
+<img width="234" alt="Screenshot 2023-10-09 at 8 50 51 AM" src="https://github.com/timsutton/speedwagon/assets/119358/f4db63dd-b56f-41a1-8266-40e1f8668fd8">
+
 ## Why?
 
 It is often handy to have local copies of additional simulator runtimes for the purposes of setting up macOS build machines for continuous integration. For example, they can be hosted on nearby mirror servers and retrieved more quickly and reliably.
