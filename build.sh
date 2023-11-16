@@ -3,13 +3,13 @@
 set -eux
 
 goreleaser_snapshot_build() {
-    goreleaser release --snapshot --rm-dist
+    goreleaser release --snapshot --clean
 }
 
 manual_build() {
     NAME=speedwagon
-    PLATFORMS=( linux windows )
-    ARCHS=( amd64 arm64)
+    PLATFORMS=(linux windows)
+    ARCHS=(amd64 arm64)
     BUILD_DIR=build
 
     version=$(go run main.go version)
