@@ -64,6 +64,7 @@ type DVTDownloadablePlist struct {
 }
 
 type PlatformDownloadable struct {
+	Name             string
 	Platform         string
 	Identifier       string
 	Version          version.Version

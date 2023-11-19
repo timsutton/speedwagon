@@ -83,19 +83,15 @@ working directory, named '<name of runtime>.(dmg|pkg)'.`,
 func findMatchingRuntime(runtimeName string, data util.DVTDownloadablePlist) (string, string, bool) {
 
 	var matchingRuntimes []util.PlatformDownloadable
+	var matchedRuntime util.PlatformDownloadable
 
 	for _, v := range data.Downloadables {
-		// TODO: if the user specified an exact match for a name, get it and return early
-		// if runtimeName == v.Name {
-		// 	matchingRuntimes = append(matchingRuntimes
-		// 	return runtimeFilename, runtimeUrl, authRequired
-		// }
-
 		if strings.HasPrefix(v.Name, runtimeName) {
 
 			foundRuntime := util.PlatformDownloadable{
 				Identifier: v.Identifier,
 				Source:     v.Source,
+				Name:       v.Name,
 				Platform:   v.Platform,
 			}
 
@@ -111,14 +107,29 @@ func findMatchingRuntime(runtimeName string, data util.DVTDownloadablePlist) (st
 	}
 
 	// If there are multiple matches, take the highest-versioned one
-	slices.SortFunc(matchingRuntimes, func(a, b util.PlatformDownloadable) int {
-		return a.Version.Compare(&b.Version)
-	})
+	if len(matchingRuntimes) > 1 {
+		slices.SortFunc(matchingRuntimes, func(a, b util.PlatformDownloadable) int {
+			return a.Version.Compare(&b.Version)
+		})
+		matchedRuntime = matchingRuntimes[len(matchingRuntimes)-1]
+	}
 
-	newestMatchingRuntime := matchingRuntimes[len(matchingRuntimes)-1]
-	return newestMatchingRuntime.DownloadFileName,
-		newestMatchingRuntime.Source,
-		newestMatchingRuntime.AuthRequired
+	idx := slices.IndexFunc(matchingRuntimes,
+		func(r util.PlatformDownloadable) bool {
+			// Every entry contains the words 'Simulator' or 'Simulator Runtime', and we
+			// only care about the words leading up to that
+			normalizedName := strings.Split(r.Name, " Simulator")[0]
+			return normalizedName == runtimeName
+		})
+	if idx >= 0 {
+		matchedRuntime = matchingRuntimes[idx]
+	}
+
+	fmt.Println(matchedRuntime)
+
+	return matchedRuntime.DownloadFileName,
+		matchedRuntime.Source,
+		matchedRuntime.AuthRequired
 }
 
 func init() {
