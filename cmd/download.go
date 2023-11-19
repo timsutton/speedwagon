@@ -3,10 +3,12 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"slices"
 	"strings"
 	"time"
 
 	"github.com/cavaliergopher/grab/v3"
+	"github.com/hashicorp/go-version"
 	"github.com/schollz/progressbar/v3"
 	"github.com/spf13/cobra"
 	"github.com/timsutton/speedwagon/util"
@@ -80,26 +82,45 @@ working directory, named '<name of runtime>.(dmg|pkg)'.`,
 // 3. bool: whether auth is required
 func findMatchingRuntime(runtimeName string, data util.DVTDownloadablePlist) (string, string, bool) {
 
-	var runtimeFilename string
-	var runtimeUrl string
-	authRequired := false
+	var matchingRuntimes []util.PlatformDownloadable
 
-	foundMatchingRuntime := false
 	for _, v := range data.Downloadables {
+		// TODO: if the user specified an exact match for a name, get it and return early
+		// if runtimeName == v.Name {
+		// 	matchingRuntimes = append(matchingRuntimes
+		// 	return runtimeFilename, runtimeUrl, authRequired
+		// }
+
 		if strings.HasPrefix(v.Name, runtimeName) {
-			foundMatchingRuntime = true
-			runtimeFilename = v.Name + ".dmg"
-			runtimeUrl = v.Source
+
+			var foundRuntime util.PlatformDownloadable
+			foundRuntime.Identifier = v.Identifier
+			foundRuntime.Source = v.Source
+			foundRuntime.Platform = v.Platform
+
+			ver, _ := version.NewVersion(v.Version)
+			foundRuntime.Version = *ver
+
 			if v.Authentication != "" {
-				authRequired = true
+				foundRuntime.AuthRequired = true
 			}
-		}
-		if foundMatchingRuntime {
-			break
+			foundRuntime.DownloadFileName = v.Name + ".dmg"
+			matchingRuntimes = append(matchingRuntimes, foundRuntime)
 		}
 	}
 
-	return runtimeFilename, runtimeUrl, authRequired
+	// If there are multiple matches, take the highest-versioned one
+	if len(matchingRuntimes) > 1 {
+		verCmp := func(a, b util.PlatformDownloadable) int {
+			return a.Version.Compare(&b.Version)
+		}
+		slices.SortFunc(matchingRuntimes, verCmp)
+	}
+
+	newestMatchingRuntime := matchingRuntimes[len(matchingRuntimes)-1]
+	return newestMatchingRuntime.DownloadFileName,
+		newestMatchingRuntime.Source,
+		newestMatchingRuntime.AuthRequired
 }
 
 func init() {

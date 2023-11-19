@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/hashicorp/go-version"
 	"howett.net/plist"
 )
 
@@ -60,6 +61,15 @@ type DVTDownloadablePlist struct {
 		Authentication string `plist:"authentication,omitempty"`
 	} `plist:"downloadables"`
 	Version string `plist:"version"`
+}
+
+type PlatformDownloadable struct {
+	Platform         string
+	Identifier       string
+	Version          version.Version
+	Source           string
+	DownloadFileName string
+	AuthRequired     bool
 }
 
 func RefreshDVTMetadata() {
