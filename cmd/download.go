@@ -93,10 +93,11 @@ func findMatchingRuntime(runtimeName string, data util.DVTDownloadablePlist) (st
 
 		if strings.HasPrefix(v.Name, runtimeName) {
 
-			var foundRuntime util.PlatformDownloadable
-			foundRuntime.Identifier = v.Identifier
-			foundRuntime.Source = v.Source
-			foundRuntime.Platform = v.Platform
+			foundRuntime := util.PlatformDownloadable{
+				Identifier: v.Identifier,
+				Source:     v.Source,
+				Platform:   v.Platform,
+			}
 
 			ver, _ := version.NewVersion(v.Version)
 			foundRuntime.Version = *ver
@@ -110,12 +111,9 @@ func findMatchingRuntime(runtimeName string, data util.DVTDownloadablePlist) (st
 	}
 
 	// If there are multiple matches, take the highest-versioned one
-	if len(matchingRuntimes) > 1 {
-		verCmp := func(a, b util.PlatformDownloadable) int {
-			return a.Version.Compare(&b.Version)
-		}
-		slices.SortFunc(matchingRuntimes, verCmp)
-	}
+	slices.SortFunc(matchingRuntimes, func(a, b util.PlatformDownloadable) int {
+		return a.Version.Compare(&b.Version)
+	})
 
 	newestMatchingRuntime := matchingRuntimes[len(matchingRuntimes)-1]
 	return newestMatchingRuntime.DownloadFileName,
