@@ -106,6 +106,12 @@ func findMatchingRuntime(runtimeName string, data util.DVTDownloadablePlist) (st
 		}
 	}
 
+	// TODO: If there's 'Simulator' somewhere in the provided name, just try and match an exact slice elem
+	// and bypass the
+	// if strings.Contains(runtimeName, "Simulator") {
+
+	// }
+
 	// If there are multiple matches, take the highest-versioned one
 	if len(matchingRuntimes) > 1 {
 		slices.SortFunc(matchingRuntimes, func(a, b util.PlatformDownloadable) int {
