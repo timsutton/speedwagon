@@ -3,10 +3,12 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"slices"
 	"strings"
 	"time"
 
 	"github.com/cavaliergopher/grab/v3"
+	"github.com/hashicorp/go-version"
 	"github.com/schollz/progressbar/v3"
 	"github.com/spf13/cobra"
 	"github.com/timsutton/speedwagon/util"
@@ -80,26 +82,60 @@ working directory, named '<name of runtime>.(dmg|pkg)'.`,
 // 3. bool: whether auth is required
 func findMatchingRuntime(runtimeName string, data util.DVTDownloadablePlist) (string, string, bool) {
 
-	var runtimeFilename string
-	var runtimeUrl string
-	authRequired := false
+	var matchingRuntimes []util.PlatformDownloadable
+	var matchedRuntime util.PlatformDownloadable
 
-	foundMatchingRuntime := false
 	for _, v := range data.Downloadables {
 		if strings.HasPrefix(v.Name, runtimeName) {
-			foundMatchingRuntime = true
-			runtimeFilename = v.Name + ".dmg"
-			runtimeUrl = v.Source
-			if v.Authentication != "" {
-				authRequired = true
+
+			foundRuntime := util.PlatformDownloadable{
+				Identifier: v.Identifier,
+				Source:     v.Source,
+				Name:       v.Name,
+				Platform:   v.Platform,
 			}
-		}
-		if foundMatchingRuntime {
-			break
+
+			ver, _ := version.NewVersion(v.Version)
+			foundRuntime.Version = *ver
+
+			if v.Authentication != "" {
+				foundRuntime.AuthRequired = true
+			}
+			foundRuntime.DownloadFileName = v.Name + ".dmg"
+			matchingRuntimes = append(matchingRuntimes, foundRuntime)
 		}
 	}
 
-	return runtimeFilename, runtimeUrl, authRequired
+	// TODO: If there's 'Simulator' somewhere in the provided name, just try and match an exact slice elem
+	// and bypass the
+	// if strings.Contains(runtimeName, "Simulator") {
+
+	// }
+
+	// If there are multiple matches, take the highest-versioned one
+	if len(matchingRuntimes) > 1 {
+		slices.SortFunc(matchingRuntimes, func(a, b util.PlatformDownloadable) int {
+			return a.Version.Compare(&b.Version)
+		})
+		matchedRuntime = matchingRuntimes[len(matchingRuntimes)-1]
+	}
+
+	idx := slices.IndexFunc(matchingRuntimes,
+		func(r util.PlatformDownloadable) bool {
+			// Every entry contains the words 'Simulator' or 'Simulator Runtime', and we
+			// only care about the words leading up to that
+			normalizedName := strings.Split(r.Name, " Simulator")[0]
+			return normalizedName == runtimeName
+		})
+	if idx >= 0 {
+		matchedRuntime = matchingRuntimes[idx]
+	}
+
+	fmt.Println(matchedRuntime)
+
+	return matchedRuntime.DownloadFileName,
+		matchedRuntime.Source,
+		matchedRuntime.AuthRequired
 }
 
 func init() {
