@@ -18,6 +18,8 @@ github.com/jedib0t/go-pretty/v6 v6.5.2 h1:1zphkAo77tdoCkdqIYsMHoXmEGTnTy3GZ6Mn+N
 github.com/jedib0t/go-pretty/v6 v6.5.2/go.mod h1:5LQIxa52oJ/DlDSLv0HEkWOFMDGoWkJb9ss5KqPpJBg=
 github.com/jedib0t/go-pretty/v6 v6.5.3 h1:GIXn6Er/anHTkVUoufs7ptEvxdD6KIhR7Axa2wYCPF0=
 github.com/jedib0t/go-pretty/v6 v6.5.3/go.mod h1:5LQIxa52oJ/DlDSLv0HEkWOFMDGoWkJb9ss5KqPpJBg=
+github.com/jedib0t/go-pretty/v6 v6.5.4 h1:gOGo0613MoqUcf0xCj+h/V3sHDaZasfv152G6/5l91s=
+github.com/jedib0t/go-pretty/v6 v6.5.4/go.mod h1:5LQIxa52oJ/DlDSLv0HEkWOFMDGoWkJb9ss5KqPpJBg=
 github.com/jessevdk/go-flags v1.4.0/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
 github.com/k0kubun/go-ansi v0.0.0-20180517002512-3bf9e2903213/go.mod h1:vNUNkEQ1e29fT/6vq2aBdFsgNPmy8qMdSay1npru+Sw=
 github.com/mattn/go-isatty v0.0.20/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
