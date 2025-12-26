@@ -7,7 +7,7 @@ toolchain go1.24.3
 require (
 	github.com/dustin/go-humanize v1.0.1
 	github.com/jedib0t/go-pretty/v6 v6.7.8
-	github.com/schollz/progressbar/v3 v3.18.0
+	github.com/schollz/progressbar/v3 v3.19.0
 	github.com/spf13/cobra v1.9.0
 	howett.net/plist v1.0.1
 )
