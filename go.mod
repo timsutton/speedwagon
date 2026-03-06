@@ -2,7 +2,7 @@ module github.com/timsutton/speedwagon
 
 go 1.22
 
-toolchain go1.26.0
+toolchain go1.26.1
 
 require (
 	github.com/dustin/go-humanize v1.0.1
